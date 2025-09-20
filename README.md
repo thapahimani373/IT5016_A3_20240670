@@ -1,4 +1,4 @@
-##How the System Works
+###How the System Works
 
 In the Employee Leave Management System, the workflow begins when an employee submits a leave application by entering their employee ID, name, number of leave days, and the reason for the leave. Once the application is submitted, the system automatically evaluates it: if the requested leave is less than three days, it is automatically approved; otherwise, the application status is set to pending. Pending applications are then reviewed by a manager, who can either approve or reject the leave. After the manager's decision, the system updates the status of the application accordingly. All leave applications, along with their details such as employee information, leave days, reason, and status, can be displayed either in full detail or as a summary. Finally, the system generates overall statistics, showing the total number of applications and a breakdown of approved, pending, and rejected requests. This structured workflow ensures that the leave approval process is clear, efficient, and easy to track.
 
