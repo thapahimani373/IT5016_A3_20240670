@@ -1,115 +1,161 @@
-# requisitionsystem.py
+# leave_manager.py
+"""Employee Leave Management System with Software Design Principles
+    This program manages employee leave applications with clear application of software design principles.
+"""
 
-class RequisitionSystem:
-    # Class-level list to store all requisitions
-    # --- Principle: Information Expert ---
-    # The class itself knows best about requisitions, so it stores them internally.
-    requisitions = []
+leave_counter = 500  # global counter for leave IDs (Planning stage, KISS)
 
-    def __init__(self, req_id, employee_name, item, quantity):
+class LeaveApplication:
+    """Class stores all leave applications.
+    Principles:
+    - High Cohesion: All leave-related data and behavior are in one class.
+    - Information Expert: The class has all the info needed for leave management."""
+    all_applications = []  # KISS: simple storage list
+
+    def __init__(self):
+        global leave_counter
+        leave_counter += 1
+        self.app_id = leave_counter  # auto-generate leave ID (Requirement)
+        self.emp_id = ""
+        self.emp_name = ""
+        self.leave_days = 0
+        self.reason = ""
+        self.status = "Pending"
+
+        LeaveApplication.all_applications.append(self)  # KISS: simple append
+
+    # --- Employee Details Input ---
+    def input_employee_details(self):
+        """SRP: Only collects employee details
+        KISS: simple while loop for validation
+        Encapsulation: stores employee info inside the object"""
+        while True:
+            self.emp_id = input("Enter Employee ID: ").strip()
+            if self.emp_id != "":
+                break
+            else:
+                print("Employee ID cannot be empty.")
+
+        while True:
+            self.emp_name = input("Enter Employee Name: ").strip()
+            if self.emp_name != "":
+                break
+            else:
+                print("Employee name cannot be empty.")
+
+    # --- Leave Request Input ---
+    def apply_leave(self):
+        """SRP: Only collects leave information
+        KISS: simple input validation loops
         """
-        Constructor to initialize requisition details
+        while True:
+            try:
+                self.leave_days = int(input("Enter number of leave days: "))
+                if self.leave_days > 0:
+                    break
+                else:
+                    print("Leave days must be positive.")
+            except ValueError:
+                print("Please enter a valid number.")
 
-        Principle: Encapsulation
-        - Data (employee_name, item, quantity) and behavior (methods) are bundled in one class.
+        while True:
+            self.reason = input("Enter reason for leave: ").strip()
+            if self.reason != "":
+                break
+            else:
+                print("Reason cannot be empty.")
+
+    # --- System Auto-Approval ---
+    def system_check(self):
+        """SRP: Only decides auto-approval
+        KISS single if condition
         """
-        self.req_id = req_id
-        self.employee_name = employee_name
-        self.item = item
-        self.quantity = quantity
-        self.manager_response = "Pending"
-
-        # Principle: Low Coupling
-        # Each object manages its own data and adds itself to the class list,
-        # minimizing dependencies on external code.
-        RequisitionSystem.requisitions.append(self)
-
-    # ----------------- Part A functions -----------------
-
-    def display_requisition(self):
-        """
-        Displays details of a requisition.
-
-        Principle: High Cohesion
-        - This method has a single, focused responsibility: displaying requisition data.
-        """
-        print(f"\nRequisition ID: {self.req_id}")
-        print(f"Employee: {self.employee_name}")
-        print(f"Item: {self.item}")
-        print(f"Quantity: {self.quantity}")
-        print(f"Manager Response: {self.manager_response}")
-
-    @classmethod
-    def show_all_requisitions(cls):
-        """
-        Displays all requisitions stored in the system.
-
-        Principle: Information Expert
-        - The class holds all requisition objects, so it is responsible for showing them.
-        """
-        if not cls.requisitions:
-            print("No requisitions available.")
+        if self.leave_days < 3:
+            self.status = "Approved"
         else:
-            print("\n--- All Requisitions ---")
-            for req in cls.requisitions:
-                req.display_requisition()
+            self.status = "Pending"
 
-    # ----------------- Managerial response -----------------
+    # --- Manager Review for Pending ---
+    def manager_review(self):
+        """SRP: Only processes manager decision
+        KISS: simple y/n input
+        Low Coupling main program does not manipulate object internals"""
+        if self.status == "Pending":
+            decision = input("Manager: Approve this leave? (y/n): ").lower()
+            if decision == "y":
+                self.status = "Approved"
+            else:
+                self.status = "Rejected"
 
-    def add_manager_response(self, response):
-        """
-        Adds manager's approval or rejection.
+    # --- Display Application Details ---
+    def show_details(self, summary=False):
+        """SRP: Prints application details
+        Encapsulation: accesses object attributes via method
+        Flexibility summary=True shows only key info, False shows full info"""
+        
+        print("\nLeave Application")
+        
+        details = {
+            "Application ID": self.app_id,
+            "Employee ID": self.emp_id,
+            "Employee Name": self.emp_name,
+            "Leave Days": self.leave_days,
+            "Reason": self.reason,
+            "Status": self.status
+        }
 
-        Principle: Abstraction
-        - Users don’t need to know how responses are stored internally,
-          they just call this method with "approved" or "rejected".
-        """
-        if response.lower() in ["approved", "rejected"]:
-            self.manager_response = response.capitalize()
+        if summary:
+            for key in ["Application ID", "Employee Name", "Status"]:
+                print(f"{key}: {details[key]}")
         else:
-            self.manager_response = "Pending"
-
-    # ----------------- Statistics -----------------
-
-    @classmethod
-    def show_statistics(cls):
-        """
-        Shows summary of requisition responses.
-
-        Principle: Separation of Concerns
-        - This method focuses only on calculating and displaying statistics,
-          keeping responsibilities clear and modular.
-        """
-        total = len(cls.requisitions)
-        approved = sum(1 for req in cls.requisitions if req.manager_response == "Approved")
-        rejected = sum(1 for req in cls.requisitions if req.manager_response == "Rejected")
-        pending = total - (approved + rejected)
-
-        print("\n--- Statistics ---")
-        print(f"Total Requisitions: {total}")
-        print(f"Approved: {approved}")
-        print(f"Rejected: {rejected}")
-        print(f"Pending: {pending}")
+            for key, value in details.items():
+                print(f"{key}: {value}")
 
 
-# ----------------- Main Function -----------------
+# --- Alternative Statistics Function ---
+def display_statistics(applications):
+    """SRP: Only calculates and displays statistics
+    KISS: loop and dictionary to count statuses dynamically
+    Flexibility new statuses can be added to dictionary easily"""
+    
+    stats = {
+        "Approved": 0,
+        "Pending": 0,
+        "Rejected": 0
+    }
+
+    for app in applications:  # loop counts dynamically
+        if app.status in stats:
+            stats[app.status] += 1
+
+    total = len(applications)
+
+    print("\n=== Leave Applications Statistics ===")
+    print(f"Total Applications   : {total}")
+    for status, count in stats.items():
+        print(f"{status} Applications : {count}")
+
+
+# --- Main Program ---
 if __name__ == "__main__":
-    print("Welcome to the Requisition System")
+    """Separation of Concerns: main loop manages program flow only
+    Low Coupling does not manipulate object internals directly"""
+    print("=== Employee Leave Management System ===")
 
-    # Create some sample requisitions
-    # Principle: Reusability
-    # - The constructor and methods allow us to easily create new requisitions without code duplication.
-    r1 = RequisitionSystem(1, "Alice", "Laptop", 2)
-    r2 = RequisitionSystem(2, "Bob", "Office Chair", 5)
-    r3 = RequisitionSystem(3, "Charlie", "Monitor", 3)
+    while True:
+        app = LeaveApplication()       # Information Expert: class handles its own data
+        app.input_employee_details()   # SRP, Encapsulation
+        app.apply_leave()              # SRP, Encapsulation
+        app.system_check()             # SRP, KISS
+        app.manager_review()           # SRP, Low Coupling
 
-    # Manager gives responses
-    r1.add_manager_response("approved")
-    r2.add_manager_response("rejected")
-    # r3 remains pending (default)
+        again = input("\nDo you want to enter another leave application? (y/n): ").lower()
+        if again != "y":
+            break
 
-    # Show all requisitions
-    RequisitionSystem.show_all_requisitions()
+    print("\n=== All Applications ===")
+    for a in LeaveApplication.all_applications:
+        a.show_details()  # SRP, Encapsulation
 
-    # Show final statistics
-    RequisitionSystem.show_statistics()
+    # --- Call Alternative Statistics Function ---
+    display_statistics(LeaveApplication.all_applications)
