@@ -1,55 +1,23 @@
-# Requisition System
+##How the System Works
 
-This project is a Python prototype of a requisition management system.  
-It demonstrates how **software design principles** can be applied to create structured, reusable, and maintainable code.
+In the Employee Leave Management System, the workflow begins when an employee submits a leave application by entering their employee ID, name, number of leave days, and the reason for the leave. Once the application is submitted, the system automatically evaluates it: if the requested leave is less than three days, it is automatically approved; otherwise, the application status is set to pending. Pending applications are then reviewed by a manager, who can either approve or reject the leave. After the manager's decision, the system updates the status of the application accordingly. All leave applications, along with their details such as employee information, leave days, reason, and status, can be displayed either in full detail or as a summary. Finally, the system generates overall statistics, showing the total number of applications and a breakdown of approved, pending, and rejected requests. This structured workflow ensures that the leave approval process is clear, efficient, and easy to track.
 
----
+##Software Design Principles Applied##
 
-## 📌 Features
-- Create requisitions using a constructor.
-- Store requisitions in a class-level list.
-- Display all requisitions.
-- Manager can approve or reject requisitions.
-- Generate statistics on requisitions (Approved, Rejected, Pending).
+The Employee Leave Management System follows several important software design principles to make the code clean, easy to maintain, and scalable:
 
----
+Single Responsibility Principle (SRP): Each method does only one specific task, such as collecting employee details, applying for leave, checking automatic approval, handling manager review, displaying application details, or calculating statistics.
 
-## ⚙️ Software Design Principles Applied
+KISS (Keep It Simple, Stupid): The logic is simple and straightforward, with easy-to-understand conditions for automatic approval and yes/no input for manager decisions.
 
-### 1. Encapsulation
-- Data (`employee_name`, `item`, `quantity`, etc.) and related behaviors (methods) are wrapped inside the `RequisitionSystem` class.
-- This hides the internal representation and provides a clean interface.
+Encapsulation: Employee and leave information is safely stored inside the LeaveApplication class and accessed only through class methods.
 
-### 2. Information Expert
-- The `RequisitionSystem` class stores requisition data and is responsible for displaying and processing it.
-- Responsibility is given to the object that has the necessary information.
+High Cohesion: All attributes and behaviors related to leave management are grouped together in the LeaveApplication class.
 
-### 3. High Cohesion
-- Each method has a **single, focused responsibility** (e.g., `display_requisition()` only displays data, `show_statistics()` only calculates stats).
-- This makes the system easier to understand and maintain.
+Low Coupling: The main program controls the workflow without directly modifying the internal data of the leave applications.
 
-### 4. Low Coupling
-- Objects manage their own state and add themselves to the global requisition list.
-- External code does not need to handle the internal structure, reducing dependencies.
+Information Expert: The LeaveApplication class holds all the data needed to process leave requests efficiently.
 
-### 5. Abstraction
-- The `add_manager_response()` method allows users to set responses without knowing the internal storage details.
-- Users interact with simple, meaningful operations.
+Separation of Concerns: Input handling, decision logic, display, and statistics calculation are separated into dedicated methods and functions.
 
-### 6. Separation of Concerns
-- The system separates **core data storage**, **managerial response handling**, and **statistics reporting** into distinct methods.
-- This improves modularity and reduces complexity.
-
-### 7. Reusability
-- The class can be reused for future extensions, such as:
-  - Saving requisitions to a database.
-  - Adding a user interface.
-  - Expanding managerial response options.
-
----
-
-## 🚀 How to Run
-1. Save the file as `requisitionsystem.py`.
-2. Run in terminal:
-   ```bash
-   python requisitionsystem.py
+Flexibility and Extensibility: Features like summary/full display and dynamic statistics make it easy to adapt the system for future requirements.
