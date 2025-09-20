@@ -1,4 +1,4 @@
-### Employee Leave Management System
+# Employee Leave Management System
 * Overview
 
 The Employee Leave Management System is a Python-based console application designed to make managing employee leave requests simple and efficient. Employees can submit leave applications, and the system processes approvals either automatically or through manager review, following company rules. The project is built with key software design principles in mind, ensuring that the code is modular, easy to maintain, and scalable for future improvements.
@@ -31,6 +31,6 @@ Single Responsibility Principle (SRP): Each method performs only one task, such 
 
 * Flexibility and Extensibility: Features like summary/full display and dynamic statistics make it easy to adapt the system for new requirements or additional functionality in the future.
 
-## How the Code Works
+### How the Code Works
 
 When a new leave request is submitted, the system creates a LeaveApplication object and automatically assigns it a unique application ID. The program collects the employee’s details, including ID, name, number of leave days, and reason for leave. It then evaluates the request: leave under three days is automatically approved, while longer requests are marked as pending. Pending applications are reviewed by a manager, who can approve or reject them. All applications are stored in a central list, which allows the program to display either full details or a summary of each request. At the end, the system calculates and displays statistics, showing the total number of leave requests and how many were approved, pending, or rejected. Each function is designed with a clear responsibility, keeping the code organized, maintainable, and easy to understand.
