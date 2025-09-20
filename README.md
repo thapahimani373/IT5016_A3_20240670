@@ -1,4 +1,4 @@
-Employee Leave Management System
+# Employee Leave Management System
 Overview
 
 The Employee Leave Management System is a Python-based console application designed to make managing employee leave requests simple and efficient. Employees can submit leave applications, and the system processes approvals either automatically or through manager review, following company rules. The project is built with key software design principles in mind, ensuring that the code is modular, easy to maintain, and scalable for future improvements.
