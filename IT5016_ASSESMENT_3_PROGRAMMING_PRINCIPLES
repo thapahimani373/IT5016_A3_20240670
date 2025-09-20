@@ -1,0 +1,115 @@
+# requisitionsystem.py
+
+class RequisitionSystem:
+    # Class-level list to store all requisitions
+    # --- Principle: Information Expert ---
+    # The class itself knows best about requisitions, so it stores them internally.
+    requisitions = []
+
+    def __init__(self, req_id, employee_name, item, quantity):
+        """
+        Constructor to initialize requisition details
+
+        Principle: Encapsulation
+        - Data (employee_name, item, quantity) and behavior (methods) are bundled in one class.
+        """
+        self.req_id = req_id
+        self.employee_name = employee_name
+        self.item = item
+        self.quantity = quantity
+        self.manager_response = "Pending"
+
+        # Principle: Low Coupling
+        # Each object manages its own data and adds itself to the class list,
+        # minimizing dependencies on external code.
+        RequisitionSystem.requisitions.append(self)
+
+    # ----------------- Part A functions -----------------
+
+    def display_requisition(self):
+        """
+        Displays details of a requisition.
+
+        Principle: High Cohesion
+        - This method has a single, focused responsibility: displaying requisition data.
+        """
+        print(f"\nRequisition ID: {self.req_id}")
+        print(f"Employee: {self.employee_name}")
+        print(f"Item: {self.item}")
+        print(f"Quantity: {self.quantity}")
+        print(f"Manager Response: {self.manager_response}")
+
+    @classmethod
+    def show_all_requisitions(cls):
+        """
+        Displays all requisitions stored in the system.
+
+        Principle: Information Expert
+        - The class holds all requisition objects, so it is responsible for showing them.
+        """
+        if not cls.requisitions:
+            print("No requisitions available.")
+        else:
+            print("\n--- All Requisitions ---")
+            for req in cls.requisitions:
+                req.display_requisition()
+
+    # ----------------- Managerial response -----------------
+
+    def add_manager_response(self, response):
+        """
+        Adds manager's approval or rejection.
+
+        Principle: Abstraction
+        - Users don’t need to know how responses are stored internally,
+          they just call this method with "approved" or "rejected".
+        """
+        if response.lower() in ["approved", "rejected"]:
+            self.manager_response = response.capitalize()
+        else:
+            self.manager_response = "Pending"
+
+    # ----------------- Statistics -----------------
+
+    @classmethod
+    def show_statistics(cls):
+        """
+        Shows summary of requisition responses.
+
+        Principle: Separation of Concerns
+        - This method focuses only on calculating and displaying statistics,
+          keeping responsibilities clear and modular.
+        """
+        total = len(cls.requisitions)
+        approved = sum(1 for req in cls.requisitions if req.manager_response == "Approved")
+        rejected = sum(1 for req in cls.requisitions if req.manager_response == "Rejected")
+        pending = total - (approved + rejected)
+
+        print("\n--- Statistics ---")
+        print(f"Total Requisitions: {total}")
+        print(f"Approved: {approved}")
+        print(f"Rejected: {rejected}")
+        print(f"Pending: {pending}")
+
+
+# ----------------- Main Function -----------------
+if __name__ == "__main__":
+    print("Welcome to the Requisition System")
+
+    # Create some sample requisitions
+    # Principle: Reusability
+    # - The constructor and methods allow us to easily create new requisitions without code duplication.
+    r1 = RequisitionSystem(1, "Alice", "Laptop", 2)
+    r2 = RequisitionSystem(2, "Bob", "Office Chair", 5)
+    r3 = RequisitionSystem(3, "Charlie", "Monitor", 3)
+
+    # Manager gives responses
+    r1.add_manager_response("approved")
+    r2.add_manager_response("rejected")
+    # r3 remains pending (default)
+
+    # Show all requisitions
+    RequisitionSystem.show_all_requisitions()
+
+    # Show final statistics
+    RequisitionSystem.show_statistics()
