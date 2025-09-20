@@ -1,20 +1,55 @@
-# IT5016 Programming Principles Repository
+# Requisition System
 
-This repo explores programming principles with Python examples. I created these codes to learn and analyze how they make code easy to maintain and extend.
+This project is a Python prototype of a requisition management system.  
+It demonstrates how **software design principles** can be applied to create structured, reusable, and maintainable code.
 
-## Principles Explored
-1. **Encapsulation**: Hides data like balance in a bank account. See Encapsulation/bank_account.py. Analysis: Keeps code safe and easy to update without breaking other parts. I like how it protects data.
+---
 
-2. **Inheritance**: Reuses code, like animals sharing traits. See Inheritance/animals.py. Analysis: Saves time but needs care to avoid confusion. I found it fun to add Dog and Cat.
+## 📌 Features
+- Create requisitions using a constructor.
+- Store requisitions in a class-level list.
+- Display all requisitions.
+- Manager can approve or reject requisitions.
+- Generate statistics on requisitions (Approved, Rejected, Pending).
 
-3. **Abstraction**: Hides complex details, like area math. See Abstraction/shape.py. Analysis: Simplifies use and is extendable. I struggled at first but now see its value.
+---
 
-4. **Polymorphism**: Same method, different actions. See Polymorphism/vehicles.py. Analysis: Makes code flexible and reusable. I enjoyed testing it with Car and Boat.
+## ⚙️ Software Design Principles Applied
 
-5. **SOLID (Single Responsibility)**: One job per class. See SOLID/user_manager.py. Analysis: Keeps code clean and fixable. Research shows it cuts bugs, which helps my practice.
+### 1. Encapsulation
+- Data (`employee_name`, `item`, `quantity`, etc.) and related behaviors (methods) are wrapped inside the `RequisitionSystem` class.
+- This hides the internal representation and provides a clean interface.
 
-## How These Relate to My Practice
-I wrote these codes to practice. They help build maintainable software – like encapsulation in real apps. I learned from geeksforgeeks.org and added my thoughts.
+### 2. Information Expert
+- The `RequisitionSystem` class stores requisition data and is responsible for displaying and processing it.
+- Responsibility is given to the object that has the necessary information.
 
-## What I Learned
-These principles turn messy code into neat, professional work. I analyzed: Without them, adding features gets hard and buggy. This repo shows my research and practice together.
+### 3. High Cohesion
+- Each method has a **single, focused responsibility** (e.g., `display_requisition()` only displays data, `show_statistics()` only calculates stats).
+- This makes the system easier to understand and maintain.
+
+### 4. Low Coupling
+- Objects manage their own state and add themselves to the global requisition list.
+- External code does not need to handle the internal structure, reducing dependencies.
+
+### 5. Abstraction
+- The `add_manager_response()` method allows users to set responses without knowing the internal storage details.
+- Users interact with simple, meaningful operations.
+
+### 6. Separation of Concerns
+- The system separates **core data storage**, **managerial response handling**, and **statistics reporting** into distinct methods.
+- This improves modularity and reduces complexity.
+
+### 7. Reusability
+- The class can be reused for future extensions, such as:
+  - Saving requisitions to a database.
+  - Adding a user interface.
+  - Expanding managerial response options.
+
+---
+
+## 🚀 How to Run
+1. Save the file as `requisitionsystem.py`.
+2. Run in terminal:
+   ```bash
+   python requisitionsystem.py
